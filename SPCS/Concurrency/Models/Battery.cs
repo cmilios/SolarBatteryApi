@@ -25,7 +25,7 @@
             decimal dischargingRate)
         {
             InitialState = initialState;
-            LowerstThreshold = lowestThreshold;
+            LowestThreshold = lowestThreshold;
             HighestThreshold = highestThreshold;
             Capacity = capacity;
             CurrentState = initialState;
@@ -34,7 +34,7 @@
         }
 
         public decimal InitialState { get; set; }
-        public decimal LowerstThreshold { get; set; }
+        public decimal LowestThreshold { get; set; }
         public decimal HighestThreshold { get; set; }
         public decimal ChargingRate { get; set; }
         public decimal DischargingRate { get; set; }
@@ -42,95 +42,38 @@
         public decimal Capacity { get; set; }
         public decimal CurrentState { get; set; }
 
-        public void Charge(PowerTimestamp powerTimestamp, ConcurrencyCalculation calculation)
+        public decimal ChangeCurrentCharge(List<PowerTimestamp> batteryHistory, PowerTimestamp powerTimestamp)
         {
-            var chargeLoad = powerTimestamp.Value;
-            if (CurrentState < HighestThreshold)
+            var power = powerTimestamp.Value;
+            // Determine the actual amount to transfer, limited by max transfer rate
+            decimal transferAmount = Math.Clamp(power, -DischargingRate, ChargingRate);
+            // Calculate the new charge after applying the transfer amount
+            decimal newCharge = CurrentState + transferAmount;
+
+            if (newCharge < 0)
             {
-                if (chargeLoad > ChargingRate)
-                {
-                    if (ChargingRate >= HighestThreshold - CurrentState)
-                    {
-                        CurrentState = HighestThreshold; //excess charge chargeload - (HighestThreshold - CurrentState)
-                        calculation.PowerToTheNetwork.Add(new PowerTimestamp
-                        {
-                            Date = powerTimestamp.Date,
-                            Value = (chargeLoad - (HighestThreshold - CurrentState))
-                        });
-
-                    }
-                    else
-                    {
-                        CurrentState += ChargingRate; //excess charge chargeload - Chargingrate
-                        calculation.PowerToTheNetwork.Add(new PowerTimestamp
-                        {
-                            Date = powerTimestamp.Date,
-                            Value = ((chargeLoad - ChargingRate))
-                        });
-
-                    }
-                }
-                else
-                {
-                    if (chargeLoad >= HighestThreshold - CurrentState)
-                    {
-                        CurrentState = HighestThreshold; //excess charge chargeload - (HighestThreshold - CurrentState)
-                        calculation.PowerToTheNetwork.Add(new PowerTimestamp
-                        {
-                            Date = powerTimestamp.Date,
-                            Value = (chargeLoad - (HighestThreshold - CurrentState))
-                        });
-
-                    }
-                    else
-                    {
-                        CurrentState += chargeLoad; //no excess charge
-                        calculation.PowerToTheNetwork.Add(new PowerTimestamp
-                        {
-                            Date = powerTimestamp.Date,
-                            Value = 0
-                        });
-
-                    }
-                }
+                newCharge = Math.Max(newCharge, LowestThreshold);
             }
-            calculation.BatteryHistory.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState });
-        }
-
-        public void Discharge(PowerTimestamp powerTimestamp, ConcurrencyCalculation calculation)
-        {
-            var dischargeLoad = powerTimestamp.Value;
-            if (CurrentState > LowerstThreshold)
+            // Enforce 10% and 90% charge limits
+            if (CurrentState >= LowestThreshold)
             {
-                if (dischargeLoad > DischargingRate)
-                {
-                    if (DischargingRate >= CurrentState - LowerstThreshold)
-                    {
-                        CurrentState = LowerstThreshold; //more power needed dischargeLoad - (CurrentState - LowerstThreshold)
-                        calculation.PowerFromTheNetwork.Add(new PowerTimestamp
-                        {
-
-                        });
-                    }
-                    else
-                    {
-                        CurrentState -= DischargingRate; //more power needed dischargeLoad - DischargingRate
-                    }
-                }
-                else
-                {
-                    if (dischargeLoad >= CurrentState - LowerstThreshold)
-                    {
-                        CurrentState = LowerstThreshold; //more power needed dischargeLoad - (CurrentState - LowerstThreshold)
-                    }
-                    else
-                    {
-                        CurrentState -= dischargeLoad; //no more power needed
-                    }
-
-                }
+                // Clamp within the min and max charge thresholds (10% and 90%)
+                newCharge = Math.Clamp(newCharge, LowestThreshold, HighestThreshold);
             }
-            calculation.BatteryHistory.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState });
+            else
+            {
+                // Clamp only by the maximum limit if starting below the min threshold
+                newCharge = Math.Min(newCharge, HighestThreshold);
+            }
+
+            // Calculate the actual amount of charge/discharge applied
+            decimal actualAmountTransferred = newCharge - CurrentState;
+
+            // Update the current charge
+            CurrentState = newCharge;
+            batteryHistory.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState });
+            // Return the actual amount transferred
+            return actualAmountTransferred;
         }
 
     }
