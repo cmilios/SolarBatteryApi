@@ -1,4 +1,5 @@
 ﻿using SPCS.Concurrency.Dtos;
+using SPCS.Concurrency.Enum;
 using SPCS.Concurrency.Models;
 
 namespace SPCS.Concurrency.Mappers
@@ -9,7 +10,9 @@ namespace SPCS.Concurrency.Mappers
         {
             return new ConcurrencyCalculationDto
             {
-                PowerTimestamps = [.. source.PowerTimestamps.Select(x => PowerTimestampDtoMapper.Map(x))],
+                BatteryHistory = [.. source.PowerTimestamps.Where(x => x.Type == PowerTimestampType.BatteryHistory).Select(x => PowerTimestampDtoMapper.Map(x))],
+                PowerFromTheNetwork = [.. source.PowerTimestamps.Where(x => x.Type == PowerTimestampType.PowerFromTheNetwork).Select(x => PowerTimestampDtoMapper.Map(x))],
+                PowerToTheNetwork = [.. source.PowerTimestamps.Where(x => x.Type == PowerTimestampType.PowerToTheNetwork).Select(x => PowerTimestampDtoMapper.Map(x))],
                 ConcurrencyMetric = source.ConcurrencyMetric,
                 Id = source.Id,
 
