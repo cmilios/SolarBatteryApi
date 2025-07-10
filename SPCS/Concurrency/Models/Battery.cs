@@ -42,8 +42,31 @@
         public decimal Capacity { get; set; }
         public decimal CurrentState { get; set; }
 
-        public decimal ChangeCurrentCharge(List<PowerTimestamp> batteryHistory, PowerTimestamp powerTimestamp)
+        public decimal ChangeCurrentCharge(List<PowerTimestamp> powerTimestamps, PowerTimestamp powerTimestamp)
         {
+            var energy = powerTimestamp.Value;
+            if (energy > 0)
+            {
+                decimal availableCapacity = Math.Max(HighestThreshold - CurrentState, 0);
+                decimal chargeAmount = Math.Min(energy, Math.Min(ChargingRate, availableCapacity));
+                CurrentState += chargeAmount;
+                powerTimestamps.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
+
+                return chargeAmount;
+            }
+            else if (energy < 0)
+            {
+                decimal availableEnergy = Math.Max(CurrentState - LowestThreshold, 0);
+                decimal dischargeAmount = Math.Min(-energy, Math.Min(DischargingRate, availableEnergy));
+                CurrentState -= dischargeAmount;
+                powerTimestamps.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
+
+                return -dischargeAmount;
+            }
+            powerTimestamps.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
+            return 0;
+
+
             var power = powerTimestamp.Value;
             // Determine the actual amount to transfer, limited by max transfer rate
             decimal transferAmount = Math.Clamp(power, -DischargingRate, ChargingRate);
@@ -71,7 +94,7 @@
 
             // Update the current charge
             CurrentState = newCharge;
-            batteryHistory.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState });
+            powerTimestamps.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
             // Return the actual amount transferred
             return actualAmountTransferred;
         }

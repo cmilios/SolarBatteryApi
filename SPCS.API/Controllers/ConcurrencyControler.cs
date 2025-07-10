@@ -21,11 +21,11 @@ namespace SPCS.API.Controllers
             return await _mediator.Send(query, cancellationToken);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateCalculation([FromBody] CreateConcurrencyCalculationCommand command, CancellationToken cancellationToken)
+        [HttpPut("/create")]
+        public async Task<ConcurrencyCalculationDto?> CreateCalculation([FromBody] CreateConcurrencyCalculationCommand command, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(command, cancellationToken);
-            return CreatedAtAction(nameof(GetAsync), new { id = result!.Id }, result);
+            return result;
         }
     }
 }

@@ -9,11 +9,9 @@ namespace SPCS.Concurrency.Mappers
         {
             return new ConcurrencyCalculationDto
             {
-                BatteryHistory = source.BatteryHistory,
+                PowerTimestamps = [.. source.PowerTimestamps.Select(x => PowerTimestampDtoMapper.Map(x))],
                 ConcurrencyMetric = source.ConcurrencyMetric,
                 Id = source.Id,
-                PowerFromTheNetwork = source.PowerFromTheNetwork,
-                PowerToTheNetwork = source.PowerToTheNetwork
 
             };
         }

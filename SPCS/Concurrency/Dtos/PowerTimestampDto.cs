@@ -1,18 +1,12 @@
 ﻿using SPCS.Concurrency.Enum;
 
-namespace SPCS.Concurrency.Models
+namespace SPCS.Concurrency.Dtos
 {
-    public class PowerTimestamp
+    public class PowerTimestampDto
     {
         public int Id { get; set; }
         public DateTimeOffset Date { get; set; }
         public decimal Value { get; set; }
-
-        public int ConcurrencyCalculationId { get; set; }
-        public ConcurrencyCalculation ConcurrencyCalculation { get; set; } = default!;
-
         public PowerTimestampType Type { get; set; }
     }
-
-
 }

@@ -1,7 +1,7 @@
 ﻿using MediatR;
+using SPCS.Application.Concurrency.Abstractions;
 using SPCS.Concurrency.Dtos;
 using SPCS.Concurrency.Mappers;
-using SPCS.Concurrency.Models;
 
 namespace SPCS.Application.Concurrency.Queries
 {
@@ -10,13 +10,23 @@ namespace SPCS.Application.Concurrency.Queries
         public int Id { get; set; }
     }
 
-    public class GetConcurrencyCalculationQueryHandler : IRequestHandler<GetConcurrencyCalculationQuery, ConcurrencyCalculationDto>
+    public class GetConcurrencyCalculationQueryHandler : IRequestHandler<GetConcurrencyCalculationQuery, ConcurrencyCalculationDto?>
     {
-        public Task<ConcurrencyCalculationDto> Handle(GetConcurrencyCalculationQuery request, CancellationToken cancellationToken)
+        private readonly IConcurrencyCalculationRepository _concurrencyCalculationRepository;
+        public GetConcurrencyCalculationQueryHandler(IConcurrencyCalculationRepository concurrencyCalculationRepository)
         {
-            var response = new ConcurrencyCalculation();
+            _concurrencyCalculationRepository = concurrencyCalculationRepository ?? throw new ArgumentNullException(nameof(concurrencyCalculationRepository));
+        }
+        public async Task<ConcurrencyCalculationDto?> Handle(GetConcurrencyCalculationQuery request, CancellationToken cancellationToken)
+        {
+
+            var response = await _concurrencyCalculationRepository.GetByIdAsync(request.Id);
+            if (response == null)
+            {
+                return null;
+            }
             var result = ConcurrencyCalculationDtoMapper.Map(response);
-            return Task.FromResult(result);
+            return result;
         }
     }
 }

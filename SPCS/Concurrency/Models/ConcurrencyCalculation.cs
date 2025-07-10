@@ -3,9 +3,7 @@
     public record ConcurrencyCalculation
     {
         public int Id { get; init; }
-        public List<PowerTimestamp> BatteryHistory { get; set; } = default!;
-        public List<PowerTimestamp> PowerToTheNetwork { get; set; } = default!;
-        public List<PowerTimestamp> PowerFromTheNetwork { get; set; } = default!;
+        public List<PowerTimestamp> PowerTimestamps { get; set; } = new();
         public decimal ConcurrencyMetric { get; set; }
     }
 }

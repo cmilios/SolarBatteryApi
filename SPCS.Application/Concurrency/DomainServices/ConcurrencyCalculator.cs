@@ -1,4 +1,5 @@
 ﻿using SPCS.Application.Concurrency.Abstractions;
+using SPCS.Concurrency.Enum;
 using SPCS.Concurrency.Models;
 
 namespace SPCS.Application.Concurrency.DomainServices
@@ -16,34 +17,36 @@ namespace SPCS.Application.Concurrency.DomainServices
                 {
                     if (difference > 0)
                     {
-                        var chargeChange = battery.ChangeCurrentCharge(result.BatteryHistory, new PowerTimestamp
+                        var chargeChange = battery.ChangeCurrentCharge(result.PowerTimestamps, new PowerTimestamp
                         {
                             Value = difference,
                             Date = moment.Date
                         });
                         if (difference > chargeChange)
                         {
-                            result.PowerToTheNetwork.Add(new PowerTimestamp
+                            result.PowerTimestamps.Add(new PowerTimestamp
                             {
                                 Date = moment.Date,
-                                Value = difference - chargeChange
+                                Value = difference - chargeChange,
+                                Type = PowerTimestampType.PowerToTheNetwork
                             });
                         }
                         concurrencyPercentageList.Add(1);
                     }
                     else
                     {
-                        var chargeChange = battery.ChangeCurrentCharge(result.BatteryHistory, new PowerTimestamp
+                        var chargeChange = battery.ChangeCurrentCharge(result.PowerTimestamps, new PowerTimestamp
                         {
                             Value = difference,
                             Date = moment.Date
                         });
                         if (chargeChange > difference)
                         {
-                            result.PowerFromTheNetwork.Add(new PowerTimestamp
+                            result.PowerTimestamps.Add(new PowerTimestamp
                             {
                                 Date = moment.Date,
-                                Value = chargeChange - difference
+                                Value = chargeChange - difference,
+                                Type = PowerTimestampType.PowerFromTheNetwork
                             });
                         }
                         concurrencyPercentageList.Add((moment.ProductionValue + Math.Abs(chargeChange)) / moment.ConsumptionValue);
@@ -51,17 +54,18 @@ namespace SPCS.Application.Concurrency.DomainServices
                 }
                 else
                 {
-                    var changeCharge = battery.ChangeCurrentCharge(result.BatteryHistory, new PowerTimestamp
+                    var changeCharge = battery.ChangeCurrentCharge(result.PowerTimestamps, new PowerTimestamp
                     {
                         Value = difference,
                         Date = moment.Date
                     });
                     if (moment.ProductionValue > changeCharge)
                     {
-                        result.PowerToTheNetwork.Add(new PowerTimestamp
+                        result.PowerTimestamps.Add(new PowerTimestamp
                         {
                             Date = moment.Date,
-                            Value = moment.ProductionValue - changeCharge
+                            Value = moment.ProductionValue - changeCharge,
+                            Type = PowerTimestampType.PowerToTheNetwork
                         });
                     }
                 }
