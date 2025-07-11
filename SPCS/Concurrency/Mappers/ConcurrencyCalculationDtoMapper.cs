@@ -14,6 +14,7 @@ namespace SPCS.Concurrency.Mappers
                 PowerFromTheNetwork = [.. source.PowerTimestamps.Where(x => x.Type == PowerTimestampType.PowerFromTheNetwork).Select(x => PowerTimestampDtoMapper.Map(x))],
                 PowerToTheNetwork = [.. source.PowerTimestamps.Where(x => x.Type == PowerTimestampType.PowerToTheNetwork).Select(x => PowerTimestampDtoMapper.Map(x))],
                 ConcurrencyMetric = source.ConcurrencyMetric,
+                NeedCoverage = source.NeedCoverage,
                 Id = source.Id,
 
             };

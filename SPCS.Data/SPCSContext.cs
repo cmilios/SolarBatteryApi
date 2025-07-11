@@ -32,6 +32,10 @@ namespace SPCS.Data
             modelBuilder.Entity<ConcurrencyCalculation>()
                 .Property(c => c.ConcurrencyMetric)
                 .HasPrecision(18, 10); // adjust as needed
+
+            modelBuilder.Entity<ConcurrencyCalculation>()
+                .Property(c => c.NeedCoverage)
+                .HasPrecision(18, 10); // adjust as needed
         }
 
 

@@ -31,7 +31,7 @@ namespace SPCS.Application.Concurrency.DomainServices
                                 Type = PowerTimestampType.PowerToTheNetwork
                             });
                         }
-                        concurrencyPercentageList.Add(1);
+                        concurrencyPercentageList.Add(moment.ConsumptionValue);
                     }
                     else
                     {
@@ -49,7 +49,7 @@ namespace SPCS.Application.Concurrency.DomainServices
                                 Type = PowerTimestampType.PowerFromTheNetwork
                             });
                         }
-                        concurrencyPercentageList.Add((moment.ProductionValue + Math.Abs(chargeChange)) / moment.ConsumptionValue);
+                        concurrencyPercentageList.Add(moment.ProductionValue + Math.Abs(chargeChange));
                     }
                 }
                 else
@@ -68,9 +68,11 @@ namespace SPCS.Application.Concurrency.DomainServices
                             Type = PowerTimestampType.PowerToTheNetwork
                         });
                     }
+                    concurrencyPercentageList.Add(moment.ConsumptionValue);
                 }
             }
-            result.ConcurrencyMetric = concurrencyPercentageList.Count() != 0 ? concurrencyPercentageList.Average() : 0;
+            result.ConcurrencyMetric = concurrencyPercentageList.Count != 0 ? concurrencyPercentageList.Sum() / (timestamps.Sum(x => x.ProductionValue) + battery.InitialState) : 0;
+            result.NeedCoverage = concurrencyPercentageList.Count != 0 ? concurrencyPercentageList.Sum() / timestamps.Sum(x => x.ConsumptionValue) : 0;
             return result;
         }
     }

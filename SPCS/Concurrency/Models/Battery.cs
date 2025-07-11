@@ -42,15 +42,15 @@
         public decimal Capacity { get; set; }
         public decimal CurrentState { get; set; }
 
-        public decimal ChangeCurrentCharge(List<PowerTimestamp> powerTimestamps, PowerTimestamp powerTimestamp)
+        public decimal ChangeCurrentCharge(List<PowerTimestamp> batteryHistory, PowerTimestamp chargeLoad)
         {
-            var energy = powerTimestamp.Value;
+            var energy = chargeLoad.Value;
             if (energy > 0)
             {
                 decimal availableCapacity = Math.Max(HighestThreshold - CurrentState, 0);
                 decimal chargeAmount = Math.Min(energy, Math.Min(ChargingRate, availableCapacity));
                 CurrentState += chargeAmount;
-                powerTimestamps.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
+                batteryHistory.Add(new PowerTimestamp { Date = chargeLoad.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
 
                 return chargeAmount;
             }
@@ -59,44 +59,13 @@
                 decimal availableEnergy = Math.Max(CurrentState - LowestThreshold, 0);
                 decimal dischargeAmount = Math.Min(-energy, Math.Min(DischargingRate, availableEnergy));
                 CurrentState -= dischargeAmount;
-                powerTimestamps.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
+                batteryHistory.Add(new PowerTimestamp { Date = chargeLoad.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
 
                 return -dischargeAmount;
             }
-            powerTimestamps.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
+            batteryHistory.Add(new PowerTimestamp { Date = chargeLoad.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
             return 0;
 
-
-            var power = powerTimestamp.Value;
-            // Determine the actual amount to transfer, limited by max transfer rate
-            decimal transferAmount = Math.Clamp(power, -DischargingRate, ChargingRate);
-            // Calculate the new charge after applying the transfer amount
-            decimal newCharge = CurrentState + transferAmount;
-
-            if (newCharge < 0)
-            {
-                newCharge = Math.Max(newCharge, LowestThreshold);
-            }
-            // Enforce 10% and 90% charge limits
-            if (CurrentState >= LowestThreshold)
-            {
-                // Clamp within the min and max charge thresholds (10% and 90%)
-                newCharge = Math.Clamp(newCharge, LowestThreshold, HighestThreshold);
-            }
-            else
-            {
-                // Clamp only by the maximum limit if starting below the min threshold
-                newCharge = Math.Min(newCharge, HighestThreshold);
-            }
-
-            // Calculate the actual amount of charge/discharge applied
-            decimal actualAmountTransferred = newCharge - CurrentState;
-
-            // Update the current charge
-            CurrentState = newCharge;
-            powerTimestamps.Add(new PowerTimestamp { Date = powerTimestamp.Date, Value = CurrentState, Type = Enum.PowerTimestampType.BatteryHistory });
-            // Return the actual amount transferred
-            return actualAmountTransferred;
         }
 
     }
