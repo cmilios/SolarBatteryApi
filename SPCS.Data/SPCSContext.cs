@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SPCS.Concurrency.Models;
+using File = SPCS.Files.Models.File;
 
 namespace SPCS.Data
 {
@@ -11,6 +12,10 @@ namespace SPCS.Data
 
         public DbSet<ConcurrencyCalculation> ConcurrencyCalculations { get; set; }
 
+        public DbSet<File> Files { get; set; }
+
+        public DbSet<List<string?>> GeneralFilePath { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -18,6 +23,7 @@ namespace SPCS.Data
             // Convert the enum to string in the DB
             modelBuilder.Entity<PowerTimestamp>()
                 .Property(p => p.Type)
+                .HasPrecision(18, 6)
                 .HasConversion<string>()
                 .IsRequired();
 

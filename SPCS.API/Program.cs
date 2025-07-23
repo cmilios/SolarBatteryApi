@@ -4,6 +4,7 @@ using SPCS.API.Middleware;
 using SPCS.Application;
 using SPCS.Application.Concurrency.Abstractions;
 using SPCS.Application.Concurrency.DomainServices;
+using SPCS.Application.Files.Abstractions;
 using SPCS.Data;
 using SPCS.Infra.Repositories;
 
@@ -18,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SPCSContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IConcurrencyCalculationRepository, ConcurrencyCalculationRepository>();
+builder.Services.AddScoped<IFileRepository, FileRepository>();
 
 // Add services to the container.
 builder.Services.AddMediatR(cfg =>
@@ -25,17 +27,11 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblyContaining<AssemblyReference>();
 });
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IConcurrencyCalculator, ConcurrencyCalculator>();
 
-builder.Services.AddControllers()
-    .AddJsonOptions(opt =>
-    {
-        //opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-        opt.JsonSerializerOptions.WriteIndented = true;
-    });
+
 builder.Host.UseSerilog();
 var app = builder.Build();
 

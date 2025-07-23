@@ -5,7 +5,7 @@
 namespace SPCS.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class NewChange : Migration
+    public partial class CalcTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,11 +21,24 @@ namespace SPCS.Data.Migrations
                 oldType: "decimal(18,4)",
                 oldPrecision: 18,
                 oldScale: 4);
+
+            migrationBuilder.AddColumn<decimal>(
+                name: "NeedCoverage",
+                table: "ConcurrencyCalculations",
+                type: "decimal(18,10)",
+                precision: 18,
+                scale: 10,
+                nullable: false,
+                defaultValue: 0m);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "NeedCoverage",
+                table: "ConcurrencyCalculations");
+
             migrationBuilder.AlterColumn<decimal>(
                 name: "ConcurrencyMetric",
                 table: "ConcurrencyCalculations",

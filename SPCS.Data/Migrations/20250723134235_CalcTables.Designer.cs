@@ -12,8 +12,8 @@ using SPCS.Data;
 namespace SPCS.Data.Migrations
 {
     [DbContext(typeof(SPCSContext))]
-    [Migration("20250710123205_NewChange")]
-    partial class NewChange
+    [Migration("20250723134235_CalcTables")]
+    partial class CalcTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,10 @@ namespace SPCS.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("ConcurrencyMetric")
+                        .HasPrecision(18, 10)
+                        .HasColumnType("decimal(18,10)");
+
+                    b.Property<decimal>("NeedCoverage")
                         .HasPrecision(18, 10)
                         .HasColumnType("decimal(18,10)");
 
