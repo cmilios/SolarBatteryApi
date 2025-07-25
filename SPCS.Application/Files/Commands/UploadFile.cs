@@ -20,7 +20,7 @@ namespace SPCS.Application.Files.Commands
         private readonly IFileRepository _fileRepository = fileRepository;
         public async Task<FileDto?> Handle(FileUploadCommand request, CancellationToken cancellationToken)
         {
-            var fileGeneralPath = await _fileRepository.GetFileGeneralPath();
+            var fileGeneralPath = await _fileRepository.GetByName("fileGeneralPath");
             var file = new File
             {
                 Name = request.FileName,

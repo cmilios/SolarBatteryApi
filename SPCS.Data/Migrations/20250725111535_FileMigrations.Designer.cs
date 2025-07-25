@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SPCS.Data;
 
@@ -11,9 +12,11 @@ using SPCS.Data;
 namespace SPCS.Data.Migrations
 {
     [DbContext(typeof(SPCSContext))]
-    partial class SPCSContextModelSnapshot : ModelSnapshot
+    [Migration("20250725111535_FileMigrations")]
+    partial class FileMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

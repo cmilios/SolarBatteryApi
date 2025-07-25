@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SPCS.Common.Models;
 using SPCS.Concurrency.Models;
 using File = SPCS.Files.Models.File;
 
@@ -14,7 +15,7 @@ namespace SPCS.Data
 
         public DbSet<File> Files { get; set; }
 
-        public DbSet<List<string?>> GeneralFilePath { get; set; }
+        public DbSet<SPCSConfiguration> Configuration { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

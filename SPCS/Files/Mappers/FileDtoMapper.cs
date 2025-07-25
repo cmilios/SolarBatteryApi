@@ -10,6 +10,7 @@ namespace SPCS.Files.Mappers
         {
             return new FileDto
             {
+                Id = source.Id,
                 Name = source.Name,
                 ContentType = source.ContentType,
                 Type = source.Type,

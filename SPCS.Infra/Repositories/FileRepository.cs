@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SPCS.Application.Files.Abstractions;
+using SPCS.Common.Models;
 using SPCS.Data;
 using File = SPCS.Files.Models.File;
 
@@ -16,9 +17,9 @@ namespace SPCS.Infra.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<string?>?> GetFileGeneralPath()
+        public async Task<SPCSConfiguration?> GetByName(string name)
         {
-            return await _context.GeneralFilePath.FirstOrDefaultAsync();
+            return await _context.Configuration.FirstOrDefaultAsync(x => x.Name == name);
 
         }
     }
