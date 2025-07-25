@@ -39,6 +39,10 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<SPCSContext>();
     dbContext.Database.Migrate();
+    dbContext.Database.ExecuteSqlRaw(@"
+    INSERT INTO Configuration (Name,Value,Type)
+    VALUES ('fileGeneralPath', 'C:\files\', 1);
+");
 }
 
 // Configure the HTTP request pipeline.

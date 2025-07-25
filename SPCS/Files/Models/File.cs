@@ -1,4 +1,5 @@
-﻿using SPCS.Files.Enums;
+﻿using SPCS.Concurrency.Models;
+using SPCS.Files.Enums;
 
 namespace SPCS.Files.Models
 {
@@ -9,5 +10,6 @@ namespace SPCS.Files.Models
         public string Path { get; set; } = default!;
         public FileType Type { get; set; } = default!;
         public string ContentType { get; set; } = default!;
+        public List<PowerTimestamp?> Timestamps { get; set; } = default!;
     }
 }
