@@ -81,6 +81,9 @@ namespace SPCS.Data.Migrations
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<int?>("FileId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasPrecision(18, 6)
@@ -92,6 +95,8 @@ namespace SPCS.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ConcurrencyCalculationId");
+
+                    b.HasIndex("FileId");
 
                     b.ToTable("PowerTimestamp");
                 });
@@ -132,12 +137,21 @@ namespace SPCS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SPCS.Files.Models.File", null)
+                        .WithMany("Timestamps")
+                        .HasForeignKey("FileId");
+
                     b.Navigation("ConcurrencyCalculation");
                 });
 
             modelBuilder.Entity("SPCS.Concurrency.Models.ConcurrencyCalculation", b =>
                 {
                     b.Navigation("PowerTimestamps");
+                });
+
+            modelBuilder.Entity("SPCS.Files.Models.File", b =>
+                {
+                    b.Navigation("Timestamps");
                 });
 #pragma warning restore 612, 618
         }

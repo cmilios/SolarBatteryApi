@@ -5,11 +5,17 @@
 namespace SPCS.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class FileMigrations : Migration
+    public partial class FileInfra : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "FileId",
+                table: "PowerTimestamp",
+                type: "int",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Configuration",
                 columns: table => new
@@ -40,16 +46,40 @@ namespace SPCS.Data.Migrations
                 {
                     table.PrimaryKey("PK_Files", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PowerTimestamp_FileId",
+                table: "PowerTimestamp",
+                column: "FileId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_PowerTimestamp_Files_FileId",
+                table: "PowerTimestamp",
+                column: "FileId",
+                principalTable: "Files",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_PowerTimestamp_Files_FileId",
+                table: "PowerTimestamp");
+
             migrationBuilder.DropTable(
                 name: "Configuration");
 
             migrationBuilder.DropTable(
                 name: "Files");
+
+            migrationBuilder.DropIndex(
+                name: "IX_PowerTimestamp_FileId",
+                table: "PowerTimestamp");
+
+            migrationBuilder.DropColumn(
+                name: "FileId",
+                table: "PowerTimestamp");
         }
     }
 }
