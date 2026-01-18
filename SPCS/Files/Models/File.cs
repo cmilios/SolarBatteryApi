@@ -11,5 +11,8 @@ namespace SPCS.Files.Models
         public FileType Type { get; set; } = default!;
         public string ContentType { get; set; } = default!;
         public List<PowerTimestamp?> Timestamps { get; set; } = default!;
+        public List<ParsedTimestamp> ParsedTimestamps { get; set; } = new();
+        public int? ApplicationId { get; set; }
+        public Application? Application { get; set; }
     }
 }

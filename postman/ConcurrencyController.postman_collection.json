@@ -1,0 +1,113 @@
+{
+  "info": {
+    "_postman_id": "b1a7d6e4-0000-4000-8000-000000000001",
+    "name": "SPCS ConcurrencyController",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:5001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "CreateConcurrencyCalculation",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{
+  \"batteryInitialState\": 50.0,
+  \"batteryLowestThreshold\": 20.0,
+  \"batteryHighestThreshold\": 90.0,
+  \"batteryChargingRate\": 5.0,
+  \"batteryDischargingRate\": 4.0,
+  \"batteryCapacity\": 100.0,
+  \"timestamps\": [
+    {
+      \"date\": \"2025-07-01T08:00:00+00:00\",
+      \"productionValue\": 3.5,
+      \"consumptionValue\": 2.1
+    },
+    {
+      \"date\": \"2025-07-01T09:00:00+00:00\",
+      \"productionValue\": 4.0,
+      \"consumptionValue\": 1.8
+    }
+  ]
+}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/create",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "create"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success 200",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/create"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_body": "{\n  \"id\": 1,\n  \"batteryHistory\": [\n    { \"id\": 1, \"date\": \"2025-07-01T08:00:00+00:00\", \"value\": 48.5, \"type\": 2 },\n    { \"id\": 2, \"date\": \"2025-07-01T09:00:00+00:00\", \"value\": 49.0, \"type\": 2 }\n  ],\n  \"powerToTheNetwork\": [ { \"id\": 3, \"date\": \"2025-07-01T08:00:00+00:00\", \"value\": 0.0, \"type\": 0 } ],\n  \"powerFromTheNetwork\": [ { \"id\": 4, \"date\": \"2025-07-01T08:00:00+00:00\", \"value\": 0.0, \"type\": 1 } ],\n  \"concurrencyMetric\": 0.1234,\n  \"needCoverage\": 0.0\n}",
+          "rawModeData": "{\n  \"id\": 1,\n  \"batteryHistory\": [\n    { \"id\": 1, \"date\": \"2025-07-01T08:00:00+00:00\", \"value\": 48.5, \"type\": 2 },\n    { \"id\": 2, \"date\": \"2025-07-01T09:00:00+00:00\", \"value\": 49.0, \"type\": 2 }\n  ],\n  \"powerToTheNetwork\": [ { \"id\": 3, \"date\": \"2025-07-01T08:00:00+00:00\", \"value\": 0.0, \"type\": 0 } ],\n  \"powerFromTheNetwork\": [ { \"id\": 4, \"date\": \"2025-07-01T08:00:00+00:00\", \"value\": 0.0, \"type\": 1 } ],\n  \"concurrencyMetric\": 0.1234,\n  \"needCoverage\": 0.0\n}",
+          "content": "application/json"
+        }
+      ]
+    },
+    {
+      "name": "GetConcurrencyCalculation",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/:id/get",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ":id",
+            "get"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success 200",
+          "status": "OK",
+          "code": 200,
+          "_body": "{\n  \"id\": 1,\n  \"batteryHistory\": [\n    { \"id\": 1, \"date\": \"2025-07-01T08:00:00+00:00\", \"value\": 48.5, \"type\": 2 }\n  ],\n  \"powerToTheNetwork\": [],\n  \"powerFromTheNetwork\": [],\n  \"concurrencyMetric\": 0.1234,\n  \"needCoverage\": 0.0\n}\n",
+          "content": "application/json"
+        }
+      ]
+    }
+  ]
+}

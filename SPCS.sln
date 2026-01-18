@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36121.58
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11408.102 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPCS", "SPCS\SPCS.csproj", "{72F610B0-6EAA-43EE-B990-F342E01B9BC2}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPCS.Infra", "SPCS.Infra\SPCS.Infra.csproj", "{31F4FF66-A4B0-4E97-8F6C-4A0E7C1FCEBA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPCS.Data", "SPCS.Data\SPCS.Data.csproj", "{A8DE79EB-00E8-48D8-8CC9-90A356CDD53B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPCS.Tests", "SPCS.Tests\SPCS.Tests.csproj", "{1EABCC31-8792-016F-1B39-20F530BE3D38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A8DE79EB-00E8-48D8-8CC9-90A356CDD53B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8DE79EB-00E8-48D8-8CC9-90A356CDD53B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8DE79EB-00E8-48D8-8CC9-90A356CDD53B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EABCC31-8792-016F-1B39-20F530BE3D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EABCC31-8792-016F-1B39-20F530BE3D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EABCC31-8792-016F-1B39-20F530BE3D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EABCC31-8792-016F-1B39-20F530BE3D38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

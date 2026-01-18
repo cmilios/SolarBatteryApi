@@ -1,0 +1,196 @@
+{
+  "info": {
+    "_postman_id": "b1a7d6e4-0000-4000-8000-000000000010",
+    "name": "SPCS All Controllers",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:5001",
+      "type": "string"
+    },
+    {
+      "key": "filePath",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "ConcurrencyController",
+      "item": [
+        {
+          "name": "CreateConcurrencyCalculation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"batteryInitialState\": 50.0,\n  \"batteryLowestThreshold\": 20.0,\n  \"batteryHighestThreshold\": 90.0,\n  \"batteryChargingRate\": 5.0,\n  \"batteryDischargingRate\": 4.0,\n  \"batteryCapacity\": 100.0,\n  \"timestamps\": [\n    {\n      \"date\": \"2025-07-01T08:00:00+00:00\",\n      \"productionValue\": 3.5,\n      \"consumptionValue\": 2.1\n    },\n    {\n      \"date\": \"2025-07-01T09:00:00+00:00\",\n      \"productionValue\": 4.0,\n      \"consumptionValue\": 1.8\n    }\n  ]\n}",
+              "options": {
+                "raw": { "language": "json" }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["create"]
+            }
+          }
+        },
+        {
+          "name": "GetConcurrencyCalculation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/:id/get",
+              "host": ["{{baseUrl}}"],
+              "path": [":id", "get"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ApplicationController",
+      "item": [
+        {
+          "name": "CreateApplication",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"My App\" }",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/api/application", "host": ["{{baseUrl}}"], "path": ["api", "application"] }
+          }
+        },
+        {
+          "name": "GetApplications",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/application", "host": ["{{baseUrl}}"], "path": ["api", "application"] } }
+        },
+        {
+          "name": "GetApplicationById",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/application/:id", "host": ["{{baseUrl}}"], "path": ["api", "application", ":id"] } }
+        },
+        {
+          "name": "CalculateApplication",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "body": { "mode": "raw", "raw": "{\n  \"batteryInitialState\": 50.0,\n  \"batteryLowestThreshold\": 20.0,\n  \"batteryHighestThreshold\": 90.0,\n  \"batteryChargingRate\": 5.0,\n  \"batteryDischargingRate\": 4.0,\n  \"batteryCapacity\": 100.0,\n  \"timestamps\": []\n}", "options": { "raw": { "language": "json" } } },
+            "url": { "raw": "{{baseUrl}}/api/application/:id/calculate", "host": ["{{baseUrl}}"], "path": ["api", "application", ":id", "calculate"] }
+          }
+        }
+      ]
+    }
+    {
+      "name": "FileController",
+      "item": [
+        {
+          "name": "UploadFile",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "File",
+                  "type": "file",
+                  "src": "{{filePath}}"
+                },
+                {
+                  "key": "Type",
+                  "value": "0",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["upload"]
+            }
+          }
+        },
+        {
+          "name": "GetAllFiles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/file",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "file"]
+            }
+          }
+        },
+        {
+          "name": "GetFileById",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/file/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "file", ":id"]
+            }
+          }
+        },
+        {
+          "name": "DownloadFile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/file/:id/download",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "file", ":id", "download"]
+            }
+          }
+        }
+        ,
+        {
+          "name": "ParseFile",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/file/:id/parse",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "file", ":id", "parse"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success 200",
+              "status": "OK",
+              "code": 200,
+              "_body": "",
+              "content": "application/json"
+            },
+            {
+              "name": "Bad Request 400",
+              "status": "Bad Request",
+              "code": 400,
+              "_body": "",
+              "content": "application/json"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -20,6 +20,7 @@ builder.Services.AddDbContext<SPCSContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IConcurrencyCalculationRepository, ConcurrencyCalculationRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
 // Add services to the container.
 builder.Services.AddMediatR(cfg =>
@@ -40,8 +41,11 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<SPCSContext>();
     dbContext.Database.Migrate();
     dbContext.Database.ExecuteSqlRaw(@"
-    INSERT INTO Configuration (Name,Value,Type)
-    VALUES ('fileGeneralPath', 'C:\files\', 1);
+    IF NOT EXISTS (SELECT 1 FROM Configuration WHERE Name = 'fileGeneralPath')
+    BEGIN
+        INSERT INTO Configuration (Name, Value, Type)
+        VALUES ('fileGeneralPath', 'C:\files\', 1);
+    END
 ");
 }
 

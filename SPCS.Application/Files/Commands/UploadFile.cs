@@ -14,6 +14,7 @@ namespace SPCS.Application.Files.Commands
         public required byte[] Content { get; init; }
         public required string ContentType { get; init; }
         public FileType FileType { get; init; }
+        public int? ApplicationId { get; init; }
     }
 
     public class UploadFile(IFileRepository fileRepository) : IRequestHandler<FileUploadCommand, FileDto?>
@@ -32,6 +33,7 @@ namespace SPCS.Application.Files.Commands
                 ContentType = request.ContentType,
                 Path = fileGeneralPath?.Value + request.FileName,
                 Type = request.FileType,
+                ApplicationId = request.ApplicationId,
             };
             if (file.Path == null)
             {

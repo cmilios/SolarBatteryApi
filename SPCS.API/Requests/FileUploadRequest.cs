@@ -9,5 +9,6 @@ namespace SPCS.API.Requests
 
         [Required]
         public int Type { get; set; }
+        public int? ApplicationId { get; set; }
     }
 }
