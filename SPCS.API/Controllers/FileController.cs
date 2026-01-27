@@ -13,7 +13,7 @@ namespace SPCS.API.Controllers
         private readonly IMediator _mediator = mediator;
 
 
-        [HttpPut("/upload")]
+        [HttpPut("upload")]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult> Upload(
             [FromForm] FileUploadRequest request,
